@@ -49,7 +49,7 @@ namespace MyIEnumerable
             using (StreamWriter sw = new StreamWriter(path))
             {
                 List<string> list = new List<string>();
-                var enr = outEnumerable.GetEnumerator();
+                //var enr = outEnumerable.GetEnumerator();
                 /*while (enr.MoveNext())
                 {
                     do
