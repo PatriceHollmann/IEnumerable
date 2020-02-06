@@ -12,69 +12,65 @@ namespace Fork
         {
             List<double> listSumm = new List<double>();
             List<double> listI = new List<double>();
-            int k=0;
+
             foreach (var Element in masI)
             {
                 listI.Add(Element);
             }
+
             List<double> listII = new List<double>();
             foreach (var Element in masII)
             {
                 listII.Add(Element);
             }
-            if (listI.Count<=listII.Count)
+
+            if (listI.Count <= listII.Count)
             {
-                for (int i=0; i<listI.Count;i+=0)
+                for (int i = 0; i < listI.Count; i += 0)
                 {
-                    listSumm[k] = listI[i];
+                    listSumm.Add(listI[i]);
                     listI.RemoveAt(i);
-                    yield return listSumm[k];
-                    k++;
-                    listSumm[k] = listII[i];
+                    listSumm.Add(listII[i]);
                     listII.RemoveAt(i);
-                    yield return listSumm[k];
-                    k++;
                 }
                 while (listII.Count != 0)
                 {
-                    for (int j = listII.Count; j < listI.Count; j += 0)
+                    //for (int j = listII.Count; j < listI.Count; j += 0)
                     {
-                        listSumm[k] = listII[j];
-                        listII.RemoveAt(j);
-                        yield return listSumm[k];
-                        k++;
+                        listSumm.Add(listII.ElementAt(0));
+                        listII.RemoveAt(0);
                     }
-                }
-            }
-            if (listI.Count >= listII.Count)
-            {
-                for (int i = 0; i < listII.Count; i += 0)
-                {
-                    listSumm[k] = listI[i];
-                    listI.RemoveAt(i);
-                    yield return listSumm[k];
-                    k++;
-                    listSumm[k] = listII[i];
-                    listII.RemoveAt(i);
-                    yield return listSumm[k];
-                    k++;
-                }
-                while (listI.Count != 0)
-                {
-                    for (int j = listI.Count; j < listI.Count; j += 0)
-                    {
-                        listSumm[k] = listI[j];
-                        listI.RemoveAt(j);
-                        yield return listSumm[k];
-                        k++;
-                    }
-                }
-            }
-            else
-            {
 
-            }  
-        }
+                }
+                foreach (var element in listSumm)
+                {
+                    yield return element;
+                }
+            }
+
+                if (listI.Count >= listII.Count)
+                {
+                    for (int i = 0; i < listII.Count; i += 0)
+                    {
+                        listSumm.Add(listI[i]);
+                        listI.RemoveAt(i);
+                        listSumm.Add(listII[i]);
+                        listII.RemoveAt(i);
+                    }
+                    while (listI.Count != 0)
+                    {
+                        for (int j = listI.Count; j < listI.Count; j += 0)
+                        {
+                            listSumm.Add(listI[j]);
+                            listI.RemoveAt(j);
+                        }
+                    }
+                }
+            foreach (var element in listSumm)
+            {
+                yield return element;
+            }
+            }
        public static IEnumerable <double> SeparMass (this IEnumerable<double> MassSum, IEnumerable<double>MasI, IEnumerable<double>MasII, int countI,int countII)
         {
             int k = 0;

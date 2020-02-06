@@ -1,4 +1,5 @@
 ﻿using MyIEnumerable;
+using Fork;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -11,73 +12,37 @@ using System.Threading.Tasks;
 
 namespace MyEnumerable
 {
-
-    public class Selection<T>
-    {
-        T Value { get; set; }
-        public static IEnumerable<Selection<T>> Sel(string path1, string path2)
-        {
-            using (StreamReader sr = new StreamReader(path1))
-            {
-                List<Selection<T>> numbers = new List<Selection<T>>();
-                Selection<T> sel = new Selection<T>();
-                while (sr.ReadLine() != null)
-                {
-                    //Int32.TryParse(sr.ReadLine(), out var x);
-                    sel.Value = (T)Convert.ChangeType(sr.ReadLine(), typeof(T));
-                    //Selection <T>sel = new Selection<T> { Value = x };
-                    //sel.Value = Convert.ChangeType((object)x, typeof(T));
-                    //sel.Value= (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(x);
-                    numbers.Add(sel);
-                    if (numbers.Count == 10)
-                    {
-                        foreach (var element in numbers)
-                        {
-                            //Console.WriteLine(element);
-                            //Console.ReadKey();
-                            using (StreamWriter sw = new StreamWriter(path2, true))
-                            {
-                                sw.WriteLine(element);
-                            }
-                            yield return sel;
-                            numbers = new List<Selection<T>>();
-                        }
-                    }
-                }
-                if (numbers.Count > 0)
-                {
-                    foreach (var element in numbers)
-                    {
-                        using (StreamWriter sw = new StreamWriter(path2, true))
-                        {
-                            sw.WriteLine(element);
-                        }
-                        yield return sel;
-                    }
-                }
-            }
-        }
-    }
-
-
-
-
     class Program
     {
         static void Main(string[] args)
         {
-            Selection<int> sel = new Selection<int>();
-            string string1 = @"E:\Документы\mass.txt";
-            FileEnumenator.WriteToFile(string1,5, Enumerable.Range(5,500).Select(a => new DataItem { Text = $"I am data {a}" }).Select(JsonConvert.SerializeObject));
-            string string2 = @"E:\Документы\massII.txt";
+            List<double> Massive1 = new List<double>() { 54, 32, 32, 12, 43, 1, 8, 3 };
+            List<double> Massive2 = new List<double>() { 12, 3, 4, 98, 67, 34.5, 43, 65,89 };
+            List<double> MassiveSumm = new List<double>();
 
-            FileEnumenator.File(string1, 5)
-                .DeserealizeJson<DataItem>()
-                .ForEach(a => a.Text += "end of line ")
-                .Where(a=>!a.Text.Contains("9"))
-                .SerializeJson()
-                .WriteToFile(string2,5);
-                   }
+            IEnumerable<double> MasSum = MassiveSumm.SumMass(Massive1, Massive2);
+            Console.WriteLine("hey");
+            Console.ReadLine();
+            foreach (var item in MasSum)
+            {
+                //MassiveSumm.SumMass(Massive1, Massive2);
+                Console.WriteLine(item);
+            }
+            Console.ReadKey();
+            //MassiveSumm.
+            //Selection<int> sel = new Selection<int>();
+            //string string1 = @"E:\Документы\mass.txt";
+            //FileEnumenator.WriteToFile(string1, 5, Enumerable.Range(5, 500).Select(a => new DataItem { Text = $"I am data {a}" }).Select(JsonConvert.SerializeObject));
+            //string string2 = @"E:\Документы\massII.txt";
+
+            //FileEnumenator.File(string1, 5)
+            //    .DeserealizeJson<DataItem>()
+            //    .ForEach(a => a.Text += "end of line ")
+            //    .Where(a => !a.Text.Contains("9"))
+            //    .SerializeJson()
+            //    .WriteToFile(string2, 5);
+        }
+
     }
     public class DataItem
     {
@@ -93,26 +58,26 @@ namespace MyEnumerable
                 yield return i * step + start;
             }
         }
-        public static IEnumerable<int> Range(int start,int count,int step)
+        public static IEnumerable<int> Range(int start, int count, int step)
         {
             for (int i = 0; i < count; i++)
             {
-                yield return i* step+ start;
+                yield return i * step + start;
             }
         }
-        public static void WriteToFile(this IEnumerable<string> en,string path,int bufferSize)
+        public static void WriteToFile(this IEnumerable<string> en, string path, int bufferSize)
         {
             FileEnumenator.WriteToFile(path, bufferSize, en);
         }
         public static IEnumerable<T> DeserealizeJson<T>(this IEnumerable<string> en)
         {
-            return en.Select(a=>JsonConvert.DeserializeObject<T>(a));
+            return en.Select(a => JsonConvert.DeserializeObject<T>(a));
         }
-        public static IEnumerable<string> SerializeJson<T>(this IEnumerable<T> en) where T:class
+        public static IEnumerable<string> SerializeJson<T>(this IEnumerable<T> en) where T : class
         {
             return en.Select(JsonConvert.SerializeObject);
         }
-        public static IEnumerable<T> ForEach<T>( this IEnumerable<T> en, Action <T> action)
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> en, Action<T> action)
         {
             foreach (var Element in en)
             {
