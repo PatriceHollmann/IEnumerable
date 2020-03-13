@@ -15,7 +15,6 @@ namespace MyIEnumerable
             {
                 bufferSize = 10;
             }
-            Console.WriteLine("Enum step 1");
             List<string> strings = new List<string>();
             using (StreamReader sr = new StreamReader(path))
             {
@@ -33,14 +32,11 @@ namespace MyIEnumerable
                             break;
                         }
                     }
-
                     for (int i = 0; i < strings.Count; i++)
                     {
                         yield return strings[i];
-                        Console.WriteLine("Enum step 2");
                     }
                     strings.Clear();
-
                 }
             }
         }
@@ -49,18 +45,6 @@ namespace MyIEnumerable
             using (StreamWriter sw = new StreamWriter(path))
             {
                 List<string> list = new List<string>();
-                //var enr = outEnumerable.GetEnumerator();
-                /*while (enr.MoveNext())
-                {
-                    do
-                    {
-                        list.Add(enr.Current);
-                    }
-                    while (list.Count < bufferSize && enr.MoveNext());
-
-                    sw.WriteLines(list);
-                    list.Clear();
-                }*/
                 foreach (var item in outEnumerable)
                 {
                     list.Add(item);

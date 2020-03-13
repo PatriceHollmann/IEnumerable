@@ -14,35 +14,34 @@ namespace MyEnumerable
 {
     class Program
     {
+        static Random random = new Random();
+        static IEnumerable<int> randomItems()
+        {
+            return Enumerable.Range(0, 10).Select(a=> random.Next(1,100));
+        }
         static void Main(string[] args)
         {
-            List<double> Massive1 = new List<double>() { 54, 32, 32, 12, 43, 1, 8, 3 };
-            List<double> Massive2 = new List<double>() { 12, 3, 4, 98, 67, 34.5, 43, 65,89 };
-            List<double> MassiveSumm = new List<double>();
-
-            IEnumerable<double> MasSum = MassiveSumm.SumMass(Massive1, Massive2);
-            Console.WriteLine("hey");
-            Console.ReadLine();
-            foreach (var item in MasSum)
+            List<double> Massive1 = new List<double>(){ 54, 32, 32, 12, 43, 1, 8, 3, 1 };
+            foreach (var item in Massive1.ToArrays(2))
             {
-                //MassiveSumm.SumMass(Massive1, Massive2);
-                Console.WriteLine(item);
+                Console.WriteLine(item.ToDisplay());
             }
+            var (en1, en2) = randomItems().ToList().SplitToTwo();
+            Console.WriteLine(en1.ToDisplay());
+            Console.WriteLine(en2.ToDisplay());
             Console.ReadKey();
-            //MassiveSumm.
-            //Selection<int> sel = new Selection<int>();
-            //string string1 = @"E:\Документы\mass.txt";
-            //FileEnumenator.WriteToFile(string1, 5, Enumerable.Range(5, 500).Select(a => new DataItem { Text = $"I am data {a}" }).Select(JsonConvert.SerializeObject));
-            //string string2 = @"E:\Документы\massII.txt";
-
-            //FileEnumenator.File(string1, 5)
-            //    .DeserealizeJson<DataItem>()
-            //    .ForEach(a => a.Text += "end of line ")
-            //    .Where(a => !a.Text.Contains("9"))
-            //    .SerializeJson()
-            //    .WriteToFile(string2, 5);
+            string string1 = @"mass.txt";
+            FileEnumenator.WriteToFile(string1, 5, Enumerable.Range(5, 500).Select(a => new DataItem { Text = $"I am data {a}" }).Select(JsonConvert.SerializeObject));
+            string string2 = @"massII.txt";
+            FileEnumenator.File(string1, 5)
+                .DeserealizeJson<DataItem>()
+                .ForEach(a => a.Text += "end of line ")
+                .Where(a => !a.Text.Contains("9"))
+                .SerializeJson()
+                .WriteToFile(string2, 5);
+            Console.WriteLine("It's over!");
+            Console.ReadKey();
         }
-
     }
     public class DataItem
     {
@@ -84,12 +83,6 @@ namespace MyEnumerable
                 action(Element);
                 yield return Element;
             }
-            /*
-            return en.Select(a =>
-            {
-                action(a);
-                return a;
-            });*/
         }
     }
 }
